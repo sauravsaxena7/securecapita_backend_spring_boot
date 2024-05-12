@@ -17,7 +17,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_DEFAULT;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(NON_DEFAULT)
-public class User {
+public class User extends Role {
 
     private Long id;
     @NotEmpty(message = "First name required")
@@ -39,9 +39,10 @@ public class User {
     private String title;
     private String bio;
     private String imageUrl;
-    private boolean enabled;
-    private boolean isNonLocked;
-    private boolean isUsingMfa;
+    private int enabled;
+    private int isNonLocked;
+    private int isUsingMfa;
+    private String role;
     private LocalDateTime createdAt;
 
 

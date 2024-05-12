@@ -19,8 +19,10 @@ public class UserDTO {
     private String title;
     private String bio;
     private String imageUrl;
-    private boolean enabled;
-    private boolean isNonLocked;
-    private boolean isUsingMfa;
+    private int enabled;
+    private int isNonLocked;
+    private int isUsingMfa;
+    private String role;
+    private String token;
     private LocalDateTime createdAt;
 }

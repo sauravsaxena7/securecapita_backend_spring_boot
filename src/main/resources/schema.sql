@@ -25,6 +25,7 @@ CREATE TABLE Users
     using_mfa BOOLEAN DEFAULT FALSE,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     image_url varchar(255) DEFAULT NULL,
+    enabled int default 0,
     CONSTRAINT UQ_Users_Email UNIQUE (email)
 
 

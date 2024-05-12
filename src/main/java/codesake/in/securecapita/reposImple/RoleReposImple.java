@@ -1,17 +1,23 @@
 package codesake.in.securecapita.reposImple;
 
+import codesake.in.securecapita.GlobalExceptions.CatchGlobalException;
 import codesake.in.securecapita.domain.Role;
-import codesake.in.securecapita.exception.ApiException;
+import codesake.in.securecapita.dto.UserRolesDto;
+
 import codesake.in.securecapita.repos.RoleRepos;
 import codesake.in.securecapita.roleMapper.RoleRowMapper;
+import codesake.in.securecapita.roleMapper.UserRoleRowMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 
@@ -53,7 +59,7 @@ public class RoleReposImple implements RoleRepos<Role> {
     }
 
     @Override
-    public void addRoleToUser(Long userId, String roleName) {
+    public void addRoleToUser(Long userId, String roleName) throws CatchGlobalException {
 
         log.info("Adding role {} to user Id {}", roleName ,userId);
         try{
@@ -65,9 +71,9 @@ public class RoleReposImple implements RoleRepos<Role> {
 
         }catch (EmptyResultDataAccessException ex){
 
-            throw new ApiException("No Role Found by name: "+ROLE_USER.name());
+            throw new CatchGlobalException("No Role Found by name: "+ROLE_USER.name(), HttpStatus.NOT_FOUND.toString(),HttpStatus.NOT_FOUND.value());
         }catch (Exception ex){
-            throw new ApiException("INTERNAL SERVER ERROR"+" : "+ex.getMessage());
+            throw new CatchGlobalException(ex.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR.toString(),HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
 
     }
@@ -81,6 +87,13 @@ public class RoleReposImple implements RoleRepos<Role> {
     public Role getRoleByUserEmail(String email) {
         return null;
     }
+
+    @Override
+    public List<UserRolesDto> getUserRolesById(Long userId) {
+        //return Collections.singletonList(jdbcTemplate.queryForObject(GET_ALL_ROLES_BY_USER_ID, Map.of("userId", userId), new BeanPropertyRowMapper<>(UserRolesDto.class)));
+        return Collections.singletonList(jdbcTemplate.queryForObject(GET_ALL_ROLES_BY_USER_ID, Map.of("userId", userId), new UserRoleRowMapper()));
+    }
+
 
     @Override
     public void updateUserRole(Long userId, String roleName) {

@@ -14,6 +14,7 @@ public class HttpApiResponse {
     public String timeStamp;
     public int statusCode;
     public String message;
+    public String error;
     public String reason;
     public String developerMessage;
     public Boolean success;
