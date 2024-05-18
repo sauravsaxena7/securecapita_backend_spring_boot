@@ -4,7 +4,9 @@ package codesake.in.securecapita.ApiResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import org.springframework.http.HttpStatus;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Data
@@ -19,4 +21,31 @@ public class HttpApiResponse {
     public String developerMessage;
     public Boolean success;
     public Map<?,?> data;
+
+
+
+    public static HttpApiResponse getExceptionHttpApiResponse(String message,Map<?,?> item,
+                                               int statusCode,String err){
+        return  HttpApiResponse.builder()
+                .timeStamp(LocalDateTime.now().toString())
+                .data(item)
+                .message(message)
+                .success(false)
+                .statusCode(statusCode)
+                .error(err)
+                .build();
+    }
+
+
+    public static HttpApiResponse getSuccessHttpApiResponse(String message,Map<?,?> item,
+                                                              int statusCode){
+        return  HttpApiResponse.builder()
+                .timeStamp(LocalDateTime.now().toString())
+                .data(item)
+                .message(message)
+                .success(true)
+                .statusCode(statusCode)
+                .build();
+    }
+
 }

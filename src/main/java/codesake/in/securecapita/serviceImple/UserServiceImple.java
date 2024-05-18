@@ -2,10 +2,13 @@ package codesake.in.securecapita.serviceImple;
 
 import codesake.in.securecapita.DTOMapper.UserDTOMapper;
 import codesake.in.securecapita.GlobalExceptions.CatchGlobalException;
+import codesake.in.securecapita.domain.Event;
 import codesake.in.securecapita.domain.Role;
 import codesake.in.securecapita.domain.User;
 import codesake.in.securecapita.dto.UserDTO;
+import codesake.in.securecapita.dto.UserEventsDTO;
 import codesake.in.securecapita.dto.UserRolesDto;
+import codesake.in.securecapita.repos.EventRepos;
 import codesake.in.securecapita.repos.RoleRepos;
 import codesake.in.securecapita.repos.UserRepos;
 import codesake.in.securecapita.service.JwtServices;
@@ -27,6 +30,8 @@ public class UserServiceImple implements UserService {
 
     private final RoleRepos<Role> roleRepos;
 
+    private final EventRepos<Event> eventRepos;
+
     @Autowired
     private JwtServices jwtServices;
 
@@ -39,7 +44,7 @@ public class UserServiceImple implements UserService {
     }
 
     @Override
-    public User loadUserByEmail(String username) throws UsernameNotFoundException {
+    public User loadUserByEmail(String username) throws UsernameNotFoundException, CatchGlobalException {
 
         User user=userRepos.findUserByEmail(username);
         user.setRole(GetUserRolesById(user.getId()).get(0).getRoleName());
@@ -47,8 +52,23 @@ public class UserServiceImple implements UserService {
     }
 
     @Override
-    public List<UserRolesDto> GetUserRolesById(Long id) {
+    public List<UserRolesDto> GetUserRolesById(Long id) throws CatchGlobalException {
         return  roleRepos.getUserRolesById(id);
+    }
+
+    @Override
+    public List<UserEventsDTO> GetUserEventsActivityById(Long id) throws CatchGlobalException {
+        return eventRepos.getAllEventsActivityByUserId(id);
+    }
+
+    @Override
+    public void AddEventsActivityToUser(Long userId, String event_name, String device, String ip_address) throws CatchGlobalException {
+        eventRepos.addEventsActivityToUser(userId,event_name,device,ip_address);
+    }
+
+    @Override
+    public boolean verifyUserTokenForActivatingUser(String token) {
+        return false;
     }
 
 

@@ -1,6 +1,32 @@
 spring:
   profiles:
     active: @spring.profiles.active@
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_ID}
+    password: ${EMAIL_PASSWORD}
+    default-encoding: UTF-8
+    properties:
+      mail:
+        mime:
+          charset: UTF
+        smtp:
+          writetimeout: 10000
+          connectiontimeout: 10000
+          timeout: 10000
+          auth: true
+          #transport layer security
+          starttls:
+            enable: true
+            required: true
+    #CUSTOM ONE
+    verify:
+      host: ${VERIFY_EMAIL_HOST}
+
 application:
   title: SecureCapita
   version: 1
+
+server:
+  port: ${SERVER_PORT:7080}

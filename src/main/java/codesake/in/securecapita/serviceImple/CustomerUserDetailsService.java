@@ -81,7 +81,12 @@ public class CustomerUserDetailsService implements UserDetails,UserDetailsServic
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userService.loadUserByEmail(username);
+        User user = null;
+        try {
+            user = userService.loadUserByEmail(username);
+        } catch (CatchGlobalException e) {
+            throw new UsernameNotFoundException("Invalid User");
+        }
         List<GrantedAuthority> auths= new ArrayList<>();
         auths.add(new SimpleGrantedAuthority(user.getRole()));
         this.authorities=auths;

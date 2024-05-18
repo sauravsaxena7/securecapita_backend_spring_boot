@@ -18,3 +18,15 @@ spring:
     init:
       mode: never
       continue-on-error: false
+
+
+#EMAIL CONFIG
+SERVER_PORT: 8080
+EMAIL_HOST: smtp.gmail.com
+EMAIL_PORT: 587
+EMAIL_ID: sauravsrivastava121@gmail.com
+EMAIL_PASSWORD: mdge bovc rhla vbcg
+VERIFY_EMAIL_HOST: http://localhost:${SERVER_PORT}
+
+
+

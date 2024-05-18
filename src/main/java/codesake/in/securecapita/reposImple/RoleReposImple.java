@@ -89,9 +89,17 @@ public class RoleReposImple implements RoleRepos<Role> {
     }
 
     @Override
-    public List<UserRolesDto> getUserRolesById(Long userId) {
+    public List<UserRolesDto> getUserRolesById(Long userId) throws CatchGlobalException {
         //return Collections.singletonList(jdbcTemplate.queryForObject(GET_ALL_ROLES_BY_USER_ID, Map.of("userId", userId), new BeanPropertyRowMapper<>(UserRolesDto.class)));
-        return Collections.singletonList(jdbcTemplate.queryForObject(GET_ALL_ROLES_BY_USER_ID, Map.of("userId", userId), new UserRoleRowMapper()));
+        try{
+            return Collections.singletonList(jdbcTemplate.queryForObject(GET_ALL_ROLES_BY_USER_ID, Map.of("userId", userId), new UserRoleRowMapper()));
+        }catch (EmptyResultDataAccessException ex){
+            return List.of();
+        }
+        catch(Exception ex){
+            throw new CatchGlobalException(ex.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR.toString(),HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
     }
 
 

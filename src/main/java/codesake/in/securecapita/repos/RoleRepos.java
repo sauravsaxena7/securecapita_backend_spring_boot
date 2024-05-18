@@ -25,7 +25,7 @@ public interface RoleRepos<T extends Role> {
         Role getRoleByUserId(Long userId);
 
         Role getRoleByUserEmail(String email);
-        List<UserRolesDto> getUserRolesById(Long userId);
+        List<UserRolesDto> getUserRolesById(Long userId) throws CatchGlobalException;
 
         void updateUserRole(Long userId, String roleName);
 }

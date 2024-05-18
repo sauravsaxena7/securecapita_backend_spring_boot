@@ -18,21 +18,11 @@ import java.util.Map;
 @AllArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-
-
     @ExceptionHandler(CatchGlobalException.class)
     public ResponseEntity<HttpApiResponse> handleExceptions(CatchGlobalException ex, WebRequest webRequest) {
-
-        HttpApiResponse response =  HttpApiResponse.builder()
-                .timeStamp(LocalDateTime.now().toString())
-                .data(null)
-                .message(ex.getErrorMessage())
-                .success(false)
-                .statusCode(ex.getStatusCode())
-                .error(ex.getError())
-                .build();
-
+        HttpApiResponse response = HttpApiResponse.getExceptionHttpApiResponse(ex.getErrorMessage(),null,ex.getStatusCode(), ex.getError());
         return new ResponseEntity<>(response, HttpStatusCode.valueOf(ex.getStatusCode()));
     }
+
 
 }

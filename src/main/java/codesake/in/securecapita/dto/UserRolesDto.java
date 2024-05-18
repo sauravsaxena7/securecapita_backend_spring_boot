@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRolesDto {
+    Long id;
     Long userId;
     Long roleId;
     String roleName;

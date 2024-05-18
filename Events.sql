@@ -1,0 +1,11 @@
+--SELECT * FROM securecapita.events;
+--
+--INSERT INTO securecapita.events(type,description)
+--values ('LOGIN_ATTEMPT','uspicious Login'),
+--    ('LOGIN_ATTEMPT_FAILURE','Invalid Credential'),
+--    ('PROFILE_UPDATE','Updating Personal Info'),
+--    ('PROFILE_PICTURE_UPDATE','NONE'),
+--    ('ROLE_UPDATE','Change Of User Authority'),
+--    ('ACCOUNT_SETTING_UPDATE','Setting Has Been Changed'),
+--    ('PASSWORD_UPDATE','Password Reset'),
+--    ('MFA_UPDATE','Enable or Disable Multi Factor Authentication');
