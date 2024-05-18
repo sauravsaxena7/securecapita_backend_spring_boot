@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +58,7 @@ public class UserServiceImple implements UserService {
     }
 
     @Override
-    public List<UserEventsDTO> GetUserEventsActivityById(Long id) throws CatchGlobalException {
+    public List<Map<String, Object>> GetUserEventsActivityById(Long id) throws CatchGlobalException {
         return eventRepos.getAllEventsActivityByUserId(id);
     }
 

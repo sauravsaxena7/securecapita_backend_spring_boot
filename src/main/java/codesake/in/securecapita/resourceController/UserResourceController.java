@@ -80,7 +80,10 @@ public class UserResourceController {
     public ResponseEntity<HttpApiResponse> Login(@RequestBody User user) throws CatchGlobalException {
 
         try{
-            emailService.sendSimpleEmailMessage("SAURAV SAXENA","sauravsaxena121@gmail.com","");
+            //emailService.sendSimpleEmailMessage("SAURAV SAXENA","sauravsaxena121@gmail.com","");
+            //emailService.sendMimeEmailMessageWithAttachments("Saurav saxena ","sauravsaxena121@gmail.com","");
+            //emailService.sendHtmlEmail("saurav","sauravsaxena121@gmail.com","");
+            emailService.sendHtmlEmailEmbedFiles("saurav","sauravsaxena121@gmail.com","");
             log.info("Inside try catch block try to print isAutnticated");
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword()));
             if(authentication.isAuthenticated()){
@@ -112,8 +115,8 @@ public class UserResourceController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(path = "/getUserEventsActivityById/{id}")
     public ResponseEntity<HttpApiResponse> GetUserEventsActivityById(@PathVariable Long id) throws CatchGlobalException {
-        List<UserEventsDTO> userEventsDTOS = userService.GetUserEventsActivityById(id);
-        HttpApiResponse response = HttpApiResponse.getSuccessHttpApiResponse(!userEventsDTOS.isEmpty() ?"User Activity Fetched":"Empty Result Set.",Map.of("activity",userEventsDTOS),HttpStatus.OK.value());
+        List<Map<String, Object>> list = userService.GetUserEventsActivityById(id);
+        HttpApiResponse response = HttpApiResponse.getSuccessHttpApiResponse(!list.isEmpty() ?"User Activity Fetched":"Empty Result Set.",Map.of("activity",list),HttpStatus.OK.value());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

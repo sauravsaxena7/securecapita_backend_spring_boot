@@ -2,10 +2,8 @@ package codesake.in.securecapita.reposImple;
 
 import codesake.in.securecapita.GlobalExceptions.CatchGlobalException;
 import codesake.in.securecapita.domain.Event;
-import codesake.in.securecapita.dto.UserEventsDTO;
 import codesake.in.securecapita.repos.EventRepos;
 import codesake.in.securecapita.roleMapper.EventRowMapper;
-import codesake.in.securecapita.roleMapper.UserEventsRowMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -14,7 +12,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -68,9 +65,9 @@ public class EventReposImple implements EventRepos<Event> {
     }
 
     @Override
-    public List<UserEventsDTO> getAllEventsActivityByUserId(Long userId) throws CatchGlobalException {
+    public List<Map<String, Object>> getAllEventsActivityByUserId(Long userId) throws CatchGlobalException {
         try{
-            return Collections.singletonList(jdbcTemplate.queryForObject(GET_ALL_EVENTS_BY_USER_ID, Map.of("userId", userId), new UserEventsRowMapper()));
+            return jdbcTemplate.queryForList(GET_ALL_EVENTS_BY_USER_ID, Map.of("userId", userId));
         }catch (EmptyResultDataAccessException ex){
            return List.of();
         }
