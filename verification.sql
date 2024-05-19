@@ -1,0 +1,6 @@
+--SELECT * FROM securecapita.accountverification;
+--delete from securecapita.accountverification where id=2
+--alter table securecapita.accountverification add type VARCHAR(100);
+--ALTER TABLE securecapita.accountverification MODIFY token VARCHAR(500)
+--
+--desc securecapita.accountverification;

@@ -10,6 +10,9 @@ import java.util.function.Function;
 
 public interface JwtServices {
     public String extractUsername(String token);
+
+    public Map<String, Object> extractTokenVerificationClaims(String token);
+
     public Date extractExpiration (String token);
 
     public Boolean isTokenExpired(String token);
@@ -20,4 +23,5 @@ public interface JwtServices {
 
     public String GenerateToken(UserDTO userDTO);
 
+    String GenerateVerificationToken(String username, String type);
 }

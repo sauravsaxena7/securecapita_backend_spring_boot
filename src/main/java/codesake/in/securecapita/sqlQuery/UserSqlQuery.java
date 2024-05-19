@@ -6,4 +6,6 @@ public class UserSqlQuery {
     public static final String INSERT_VERIFICATION_QUERY = "INSERT INTO AccountVerification (user_id,url) VALUES (:userId, :url)";
 
     public static final String FIND_USER_BY_EMAIL = "SELECT * FROM Users WHERE email= :email";
+
+
 }

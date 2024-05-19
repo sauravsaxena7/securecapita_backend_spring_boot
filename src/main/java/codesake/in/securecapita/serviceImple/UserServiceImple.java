@@ -67,10 +67,9 @@ public class UserServiceImple implements UserService {
         eventRepos.addEventsActivityToUser(userId,event_name,device,ip_address);
     }
 
-    @Override
-    public boolean verifyUserTokenForActivatingUser(String token) {
-        return false;
-    }
+
+
+
 
 
 }

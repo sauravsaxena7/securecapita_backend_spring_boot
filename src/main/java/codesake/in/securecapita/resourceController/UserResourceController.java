@@ -5,9 +5,11 @@ import codesake.in.securecapita.ApiResponse.HttpApiResponse;
 import codesake.in.securecapita.DTOMapper.UserDTOMapper;
 import codesake.in.securecapita.GlobalExceptions.CatchGlobalException;
 import codesake.in.securecapita.domain.User;
+import codesake.in.securecapita.domain.VerificationDomain;
 import codesake.in.securecapita.dto.UserDTO;
 import codesake.in.securecapita.dto.UserEventsDTO;
 import codesake.in.securecapita.dto.UserRolesDto;
+import codesake.in.securecapita.repos.VerificationRepos;
 import codesake.in.securecapita.service.EmailService;
 import codesake.in.securecapita.service.JwtServices;
 import codesake.in.securecapita.service.UserService;
@@ -63,6 +65,9 @@ public class UserResourceController {
     @Autowired
     private final EmailService emailService;
 
+    @Autowired
+    private final VerificationRepos<VerificationDomain> verificationRepos;
+
     @PostMapping("/signUp")
     public ResponseEntity<HttpApiResponse> SignUpUser(@RequestBody User user) throws CatchGlobalException {
         UserDTO userDTO = userService.createUser(user);
@@ -83,12 +88,12 @@ public class UserResourceController {
             //emailService.sendSimpleEmailMessage("SAURAV SAXENA","sauravsaxena121@gmail.com","");
             //emailService.sendMimeEmailMessageWithAttachments("Saurav saxena ","sauravsaxena121@gmail.com","");
             //emailService.sendHtmlEmail("saurav","sauravsaxena121@gmail.com","");
-            emailService.sendHtmlEmailEmbedFiles("saurav","sauravsaxena121@gmail.com","");
+            //emailService.sendHtmlEmailEmbedFiles("saurav","sauravsaxena121@gmail.com","");
             log.info("Inside try catch block try to print isAutnticated");
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword()));
             if(authentication.isAuthenticated()){
                 UserDTO userDTO = customerUserDetailsService.getUserDTO();
-                if(!customerUserDetailsService.isEnabled()) throw new CatchGlobalException("Failed to loign! Account Is Not Active, Please check your Inbox verify it.", HttpStatus.BAD_REQUEST.toString(),HttpStatus.BAD_REQUEST.value());
+                if(!customerUserDetailsService.isEnabled()) throw new CatchGlobalException("Failed to loign! Account Is Not Active, Please check your email and verify it.", HttpStatus.BAD_REQUEST.toString(),HttpStatus.BAD_REQUEST.value());
                 userDTO.setToken(jwtServices.GenerateToken(userDTO));
                 HttpApiResponse response = HttpApiResponse.getSuccessHttpApiResponse("Login Successful.",Map.of("user",userDTO),HttpStatus.OK.value());
                 return new ResponseEntity<>(response, HttpStatus.OK);
@@ -98,7 +103,7 @@ public class UserResourceController {
             UserEventsDTO userEventsDTO = getHost(httpServletRequest);
             log.info("Inside block of login controller customeruserdetailsservices: {}",customerUserDetailsService);
             log.info("Inside login controller httpservletrequest: {}",userEventsDTO);
-            userService.AddEventsActivityToUser(customerUserDetailsService.getUserDTO().getId(), LOGIN_ATTEMPT_FAILURE.name(),userEventsDTO.getDevice(),userEventsDTO.getIp_address());
+            //userService.AddEventsActivityToUser(customerUserDetailsService.getUserDTO().getId(), LOGIN_ATTEMPT_FAILURE.name(),userEventsDTO.getDevice(),userEventsDTO.getIp_address());
             throw new CatchGlobalException(ex.getMessage(), HttpStatus.BAD_REQUEST.toString(),HttpStatus.BAD_REQUEST.value());
         }catch (Exception ex){
             throw new CatchGlobalException(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.toString(),HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -122,11 +127,20 @@ public class UserResourceController {
 
 
 
-    @GetMapping(path = "/confirmUser")
+    @GetMapping(path = "/confirmUserAccount")
     public ResponseEntity<HttpApiResponse> ConfirmOrActivateUser(@RequestParam("token") String token) throws CatchGlobalException {
-        boolean isSuccess = userService.verifyUserTokenForActivatingUser(token);
-        //HttpApiResponse response = HttpApiResponse.getSuccessHttpApiResponse(!userEventsDTOS.isEmpty() ?"User Activity Fetched":"Empty Result Set.",Map.of("activity",userEventsDTOS),HttpStatus.OK.value());
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        //boolean isSuccess = userService.verifyUserTokenForActivatingUser(token);
+
+        Boolean isAccountVerified = verificationRepos.isAccountEnabled(token);
+
+        HttpApiResponse response = HttpApiResponse.getSuccessHttpApiResponse(
+                isAccountVerified.equals(Boolean.TRUE)
+                        ? "Your Account Is now Activated."
+                        :
+                        "Account Verification Failed."
+         ,null,HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     private URI getUri(){

@@ -74,7 +74,7 @@ public class CustomerUserDetailsService implements UserDetails,UserDetailsServic
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return userDTO.getEnabled()==1;
     }
 
 

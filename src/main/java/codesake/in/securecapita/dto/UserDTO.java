@@ -2,11 +2,13 @@ package codesake.in.securecapita.dto;
 
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 
 import java.time.LocalDateTime;
-
-
+@RequiredArgsConstructor
+@SuperBuilder
 @Data
 public class UserDTO {
 

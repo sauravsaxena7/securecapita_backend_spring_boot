@@ -96,13 +96,15 @@ CREATE TABLE AccountVerification
 (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT UNSIGNED NOT NULL,
-    url VARCHAR(255) NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    username VARCHAR(155) NOT NULL,
+    type VARCHAR(50) NOT NULL CHECK(type IN ('ACCOUNT','PASSWORD')),
     --date DATETIME DEFAULT CURRENT_TIMESTAMP,
     --created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE,
 
     CONSTRAINT UQ_AccountVerification_User_Id UNIQUE (user_id),
-    CONSTRAINT UQ_AccountVerification_Url UNIQUE (url)
+    CONSTRAINT UQ_AccountVerification_Url UNIQUE (token)
 );
 
 DROP TABLE IF EXISTS ResetPasswordVerification;

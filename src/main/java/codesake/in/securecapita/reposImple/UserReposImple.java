@@ -4,8 +4,11 @@ import codesake.in.securecapita.GlobalExceptions.CatchGlobalException;
 import codesake.in.securecapita.domain.Role;
 import codesake.in.securecapita.domain.User;
 
+import codesake.in.securecapita.domain.VerificationDomain;
 import codesake.in.securecapita.repos.RoleRepos;
 import codesake.in.securecapita.repos.UserRepos;
+import codesake.in.securecapita.repos.VerificationRepos;
+import codesake.in.securecapita.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,6 +43,10 @@ public class UserReposImple implements UserRepos<User> {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final RoleRepos<Role> roleRepos;
 
+    private final VerificationRepos<VerificationDomain> verificationRepos;
+
+    private final EmailService emailService;
+
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
@@ -62,15 +69,15 @@ public class UserReposImple implements UserRepos<User> {
 
 
             //send verification url
-            String verificationUrl = getVerificationUrl(UUID.randomUUID().toString(), ACCOUNT.getType());
-
-            //save url in verification table
-            jdbcTemplate.update(INSERT_VERIFICATION_QUERY,Map.of("userId",user.getId(),"url",verificationUrl));
-
+            // String verificationUrl = getVerificationUrl(UUID.randomUUID().toString(), ACCOUNT.getType());
+            //save account verification token
+            String accountVerificationToken = verificationRepos.addOrUpdateVerificationTokenForUserAccount(user.getEmail(),user.getId(),ACCOUNT.getType());
 
 
             //send email to user with verification url
-            //emailService.sendEmailVerificationUrlOrPassword(user.getFirstName(),user.getEmail(),verificationUrl,ACCOUNT.getType());
+            emailService.sendSimpleEmailMessage(user.getFirstName(),user.getEmail(),accountVerificationToken);
+
+
             user.setEnabled(0);
             user.setIsNonLocked(0);
             // return the newly created user
@@ -80,6 +87,11 @@ public class UserReposImple implements UserRepos<User> {
         }catch (Exception ex){
             throw new CatchGlobalException(ex.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR.toString(),HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
+
+    }
+
+    @Override
+    public void setAccountVerificationToken(String username,int userId) {
 
     }
 
@@ -123,6 +135,8 @@ public class UserReposImple implements UserRepos<User> {
     public Boolean delete(Long id) {
         return null;
     }
+
+
 
     private Integer getEmailCount(String email) {
 

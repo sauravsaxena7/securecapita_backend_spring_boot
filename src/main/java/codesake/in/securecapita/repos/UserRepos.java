@@ -20,6 +20,12 @@ public interface UserRepos<T extends User> {
 
     Boolean delete(Long id);
 
+    void setAccountVerificationToken(String username,int userId);
+
+
+
+
+
     //More complex operations
 
 

@@ -183,6 +183,7 @@ public class EmailServiceImple implements EmailService {
             imageBodyPart.setDataHandler(new DataHandler(dataSource));
             imageBodyPart.setHeader("Content-ID", "image");
             mimeMultipart.addBodyPart(imageBodyPart);
+            message.setContent(mimeMultipart);
 
             javaMailSender.send(message);
         } catch (Exception exception) {

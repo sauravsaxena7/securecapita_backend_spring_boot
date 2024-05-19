@@ -23,6 +23,4 @@ public interface UserService  {
 
     void AddEventsActivityToUser (Long userId, String event_name, String device, String ip_address) throws CatchGlobalException;
 
-
-    boolean verifyUserTokenForActivatingUser(String token);
 }

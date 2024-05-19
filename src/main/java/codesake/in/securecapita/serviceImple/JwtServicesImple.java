@@ -27,6 +27,11 @@ public class JwtServicesImple implements JwtServices {
         return extractClaims(token,claims -> claims.getSubject());
     }
 
+    public Map<String, Object> extractTokenVerificationClaims(String token) {
+        Map<String, Object> claims = extractAllClaims(token);
+        return claims;
+    }
+
     @Override
     public Date extractExpiration(String token) {
         return extractClaims(token,claims -> claims.getExpiration());
@@ -50,6 +55,15 @@ public class JwtServicesImple implements JwtServices {
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()*100*60*60*10))
+                .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+
+    }
+
+    private String CreateVerificationToken(Map<String,Object> claims, String username){
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
 
     }
@@ -81,5 +95,12 @@ public class JwtServicesImple implements JwtServices {
         claims.put("role",userDTO.getRole());
 
         return createToken(claims, userDTO.getEmail());
+    }
+    @Override
+    public String GenerateVerificationToken(String username, String type) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("type",type);
+
+        return CreateVerificationToken(claims, username);
     }
 }
