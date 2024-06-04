@@ -88,7 +88,7 @@ public class UserResourceController {
             //emailService.sendSimpleEmailMessage("SAURAV SAXENA","sauravsaxena121@gmail.com","");
             //emailService.sendMimeEmailMessageWithAttachments("Saurav saxena ","sauravsaxena121@gmail.com","");
             //emailService.sendHtmlEmail("saurav","sauravsaxena121@gmail.com","");
-            //emailService.sendHtmlEmailEmbedFiles("saurav","sauravsaxena121@gmail.com","");
+           emailService.sendHtmlEmailEmbedFiles("saurav", user.getEmail(), "");
             log.info("Inside try catch block try to print isAutnticated");
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword()));
             if(authentication.isAuthenticated()){

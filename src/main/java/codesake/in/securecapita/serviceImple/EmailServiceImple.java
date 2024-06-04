@@ -179,7 +179,7 @@ public class EmailServiceImple implements EmailService {
 
             // Add images to the email body
             BodyPart imageBodyPart = new MimeBodyPart();
-            DataSource dataSource = new FileDataSource(System.getProperty("user.home") + "/Downloads/luffy-one-piece-4k.jpg");
+            DataSource dataSource = new FileDataSource(System.getProperty("user.home") + "/Downloads/luffy.jpeg");
             imageBodyPart.setDataHandler(new DataHandler(dataSource));
             imageBodyPart.setHeader("Content-ID", "image");
             mimeMultipart.addBodyPart(imageBodyPart);
