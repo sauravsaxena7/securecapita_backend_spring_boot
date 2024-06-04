@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://viaduct.proxy.rlwy.net:55367/railway
+    url: jdbc:mysql://viaduct.proxy.rlwy.net:55367/securecapita
     password: tlZPKXXukVkvxLWKAwIDPJzAZWbEIKTt
     username: root
   jpa:
